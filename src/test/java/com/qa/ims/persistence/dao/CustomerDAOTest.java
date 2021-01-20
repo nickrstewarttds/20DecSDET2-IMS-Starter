@@ -13,6 +13,7 @@ import com.qa.ims.utils.DatabaseUtilities;
 
 public class CustomerDAOTest {
 
+
     private final CustomerDao DAO = new CustomerDao();
 
     @Before
@@ -56,4 +57,5 @@ public class CustomerDAOTest {
     public void testDelete() {
         assertEquals(1, DAO.delete(1));
     }
+
 }
