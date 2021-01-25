@@ -112,5 +112,14 @@ public class Orders {
 			return false;
 		return true;
 	}
+	
+	public Double totalValue() {
+		
+		this.oItems.forEach(item -> {
+			value += item.getPrice();
+		});
+		
+		return value;
+	}
 
 }
