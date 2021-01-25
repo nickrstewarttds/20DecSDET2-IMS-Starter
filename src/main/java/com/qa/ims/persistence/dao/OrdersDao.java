@@ -5,37 +5,41 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.qa.ims.persistence.domain.Customer;
+import com.qa.ims.persistence.domain.Items;
+import com.qa.ims.persistence.domain.Orders;
 import com.qa.ims.utils.DatabaseUtilities;
 
-public class CustomerDao implements IDomainDao<Customer> {
+public class OrdersDao implements IDomainDao<Orders> {
 
     public static final Logger LOGGER = LogManager.getLogger();
 
     @Override
-    public Customer modelFromResultSet(ResultSet resultSet) throws SQLException {
-        Long id = resultSet.getLong("id");
-        String first_name = resultSet.getString("first_name");
-        String surname = resultSet.getString("surname");
-
-        return new Customer(id, first_name, surname);
+    public Orders modelFromResultSet(ResultSet resultSet) throws SQLException {
+        Long o_id = resultSet.getLong("o_id");
+        Date order_date = resultSet.getDate("order_date");
+        Long fkid = resultSet.getLong("fkid");
+        Long fki_id = resultSet.getLong("fki_id");
+        Customer ordercustomer = resultSet.getCustomer("customers");
+        return new Orders(o_id, order_date, fkid,fki_id, ordercustomer); 
     }
 
     @Override
-    public List<Customer> readAll() {
+    public List<Orders> readAll() {
         try (Connection connection = DatabaseUtilities.getInstance().getConnection();
                 Statement statement = connection.createStatement();
-                ResultSet resultSet = statement.executeQuery("select * from customers");) {
-            List<Customer> customers = new ArrayList<>();
+                ResultSet resultSet = statement.executeQuery("select * from orders");) {
+            List<Orders> orders = new ArrayList<>();
             while (resultSet.next()) {
-                customers.add(modelFromResultSet(resultSet));
+                orders.add(modelFromResultSet(resultSet));
             }
-            return customers;
+            return orders;
         } catch (SQLException e) {
             LOGGER.debug(e);
             LOGGER.error(e.getMessage());
@@ -43,10 +47,10 @@ public class CustomerDao implements IDomainDao<Customer> {
         return new ArrayList<>();
     }
 
-    public Customer readLatest() {
+    public Orders readLatest() {
         try (Connection connection = DatabaseUtilities.getInstance().getConnection();
                 Statement statement = connection.createStatement();
-                ResultSet resultSet = statement.executeQuery("SELECT * FROM customers ORDER BY id DESC LIMIT 1");) {
+                ResultSet resultSet = statement.executeQuery("SELECT * FROM customers orders BY id DESC LIMIT 1");) {
             resultSet.next();
             return modelFromResultSet(resultSet);
         } catch (Exception e) {
@@ -57,11 +61,11 @@ public class CustomerDao implements IDomainDao<Customer> {
     }
 
     @Override
-    public Customer create(Customer customer) {
+    public Orders create(Orders order) {
         try (Connection connection = DatabaseUtilities.getInstance().getConnection();
                 Statement statement = connection.createStatement();) {
-            statement.executeUpdate("INSERT INTO customers(first_name, surname) values('" + customer.getFirstName()
-                    + "','" + customer.getSurname() + "')");
+        	 statement.executeUpdate("INSERT INTO orders(Orderdate) values('" + order.getorder_date()
+             +  "')");
             return readLatest();
         } catch (Exception e) {
             LOGGER.debug(e);
@@ -70,10 +74,10 @@ public class CustomerDao implements IDomainDao<Customer> {
         return null;
     }
 
-    public Customer read(Long id) {
+    public Orders read(Long o_id) {
         try (Connection connection = DatabaseUtilities.getInstance().getConnection();
                 Statement statement = connection.createStatement();
-                ResultSet resultSet = statement.executeQuery("SELECT * FROM customers where id = " + id);) {
+                ResultSet resultSet = statement.executeQuery("SELECT * FROM customers where o_id = " + o_id);) {
             resultSet.next();
             return modelFromResultSet(resultSet);
         } catch (Exception e) {
@@ -84,12 +88,12 @@ public class CustomerDao implements IDomainDao<Customer> {
     }
 
     @Override
-    public Customer update(Customer customer) {
+    public Orders update(Orders order) {
         try (Connection connection = DatabaseUtilities.getInstance().getConnection();
                 Statement statement = connection.createStatement();) {
-            statement.executeUpdate("update customers set first_name ='" + customer.getFirstName() + "', surname ='"
-                    + customer.getSurname() + "' where id =" + customer.getId());
-            return read(customer.getId());
+            statement.executeUpdate("update orders set order_date'" + order.getorder_date() + "', order_date ='"
+                    + order.geto_id());
+            return read(order.geto_id());
         } catch (Exception e) {
             LOGGER.debug(e);
             LOGGER.error(e.getMessage());
@@ -98,15 +102,17 @@ public class CustomerDao implements IDomainDao<Customer> {
     }
 
     @Override
-    public int delete(long id) {
+    public int delete(long o_id) {
         try (Connection connection = DatabaseUtilities.getInstance().getConnection();
                 Statement statement = connection.createStatement();) {
-            return statement.executeUpdate("delete from customers where id = " + id);
+            return statement.executeUpdate("delete from customers where id = " + o_id);
         } catch (Exception e) {
             LOGGER.debug(e);
             LOGGER.error(e.getMessage());
         }
         return 0;
     }
+   
+
 
 }

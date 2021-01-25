@@ -1,5 +1,6 @@
 package com.qa.ims.utils;
 
+import java.util.Date;
 import java.util.Scanner;
 
 import org.apache.logging.log4j.LogManager;
@@ -50,5 +51,20 @@ public class JavaUtilities {
 		} while (doubleInput == null);
 		return doubleInput;
 	}
+
+	public Date getDate() {
+		Date input = null;
+		Date DateInput = null;
+		do {
+			try {
+				input = getDate();
+				DateInput = (Date)input;
+			} catch (NumberFormatException nfe) {
+				LOGGER.info("Error - Please enter a date");
+			}
+		} while (DateInput == null);
+		return DateInput;
+	}
+	
 
 }
