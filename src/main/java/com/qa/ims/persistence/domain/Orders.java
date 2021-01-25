@@ -1,23 +1,26 @@
 package com.qa.ims.persistence.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Orders {
 
 	private Long oid;
-	private Long f_cid;
-	private Long f_oid;
-	private Long f_iid;
+	private Customer oCustomer;
+	private Double value;
+	List<Items> oItems = new ArrayList<Items>();
 
-	public Orders(Long f_cid, Long f_oid, Long f_iid) {
-		this.setF_cid(f_cid);
-		this.setF_oid(f_oid);
-		this.setF_iid(f_iid);
+	public Orders(Customer oCustomer, Double value, List<Items> oItems) {
+		this.setCustomer(oCustomer);
+		this.setValue(value);
+		this.setOItems(oItems);
 	}
 
-	public Orders(Long oid, Long f_cid, Long f_oid, Long f_iid) {
+	public Orders(Long oid, Customer oCustomer, Double value, List<Items> oItems) {
 		this.setOid(oid);
-		this.setF_cid(f_cid);
-		this.setF_oid(f_oid);
-		this.setF_iid(f_iid);
+		this.setCustomer(oCustomer);
+		this.setValue(value);
+		this.setOItems(oItems);
 	}
 
 	public Long getOid() {
@@ -28,32 +31,35 @@ public class Orders {
 		this.oid = oid;
 	}
 
-	public Long getF_cid() {
-		return f_cid;
+	public Customer getCustomer() {
+		return oCustomer;
 	}
 
-	public void setF_cid(Long f_cid) {
-		this.f_cid = f_cid;
+	public void setCustomer(Customer oCustomer) {
+		this.oCustomer = oCustomer;
 	}
 
-	public Long getF_oid() {
-		return f_oid;
+	public Double getValue() {
+		return value;
 	}
 
-	public void setF_oid(Long f_oid) {
-		this.f_oid = f_oid;
+	public void setValue(Double value) {
+		this.value = value;
 	}
 
-	public Long getF_iid() {
-		return f_iid;
+	public List<Items> getOItems() {
+		return oItems;
 	}
 
-	public void setF_iid(Long f_iid) {
-		this.f_iid = f_iid;
+	public void setOItems(List<Items> items) {
+		this.oItems = items;
 	}
 
 	@Override
 	public String toString() {
+		StringBuilder order = new StringBuilder();
+		order.append(String.format("%s: %s %s", this.oid, oCustomer.getFirstName(), oCustomer.getLastName()));
+		if ()
 		return "oid:" + oid + " f_cid:" + f_cid + " f_oid:" + f_oid + " f_iid" + f_iid;
 	}
 
@@ -61,10 +67,10 @@ public class Orders {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((f_cid == null) ? 0 : f_cid.hashCode());
+		result = prime * result + ((customer == null) ? 0 : customer.hashCode());
 		result = prime * result + ((oid == null) ? 0 : oid.hashCode());
-		result = prime * result + ((f_oid == null) ? 0 : f_oid.hashCode());
-		result = prime * result + ((f_iid == null) ? 0 : f_iid.hashCode());
+		result = prime * result + ((value == null) ? 0 : value.hashCode());
+		result = prime * result + ((items == null) ? 0 : items.hashCode());
 		return result;
 	}
 
