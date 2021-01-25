@@ -1,23 +1,26 @@
 package com.qa.ims.persistence.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Orders {
 
 	private Long oid;
-	private Long f_cid;
-	private Long f_oid;
-	private Long f_iid;
+	private Customer oCustomer;
+	private Double value;
+	List<Items> oItems = new ArrayList<Items>();
 
-	public Orders(Long f_cid, Long f_oid, Long f_iid) {
-		this.setF_cid(f_cid);
-		this.setF_oid(f_oid);
-		this.setF_iid(f_iid);
+	public Orders(Customer oCustomer, Double value, List<Items> oItems) {
+		this.setOCustomer(oCustomer);
+		this.setValue(value);
+		this.setOItems(oItems);
 	}
 
-	public Orders(Long oid, Long f_cid, Long f_oid, Long f_iid) {
+	public Orders(Long oid, Customer oCustomer, Double value, List<Items> oItems) {
 		this.setOid(oid);
-		this.setF_cid(f_cid);
-		this.setF_oid(f_oid);
-		this.setF_iid(f_iid);
+		this.setOCustomer(oCustomer);
+		this.setValue(value);
+		this.setOItems(oItems);
 	}
 
 	public Long getOid() {
@@ -28,43 +31,53 @@ public class Orders {
 		this.oid = oid;
 	}
 
-	public Long getF_cid() {
-		return f_cid;
+	public Customer getOCustomer() {
+		return oCustomer;
 	}
 
-	public void setF_cid(Long f_cid) {
-		this.f_cid = f_cid;
+	public void setOCustomer(Customer oCustomer) {
+		this.oCustomer = oCustomer;
 	}
 
-	public Long getF_oid() {
-		return f_oid;
+	public Double getValue() {
+		return value;
 	}
 
-	public void setF_oid(Long f_oid) {
-		this.f_oid = f_oid;
+	public void setValue(Double value) {
+		this.value = value;
 	}
 
-	public Long getF_iid() {
-		return f_iid;
+	public List<Items> getOItems() {
+		return oItems;
 	}
 
-	public void setF_iid(Long f_iid) {
-		this.f_iid = f_iid;
+	public void setOItems(List<Items> items) {
+		this.oItems = items;
 	}
 
 	@Override
 	public String toString() {
-		return "oid:" + oid + " f_cid:" + f_cid + " f_oid:" + f_oid + " f_iid" + f_iid;
+		StringBuilder order = new StringBuilder();
+		order.append(String.format(": " + this.oid + " " + oCustomer.getFirstName() + " " + oCustomer.getSurname()));
+		if (this.oItems.isEmpty()) {
+			order.append("\n -> There are no items within this order!");
+		}else {
+			order.append(" - value of the order is = £" + this.value);
+			this.oItems.forEach(item -> {
+				order.append(item.getItemName() + ": £" + item.getPrice());
+			});
+		}
+		return order.toString();
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((f_cid == null) ? 0 : f_cid.hashCode());
+		result = prime * result + ((oCustomer == null) ? 0 : oCustomer.hashCode());
 		result = prime * result + ((oid == null) ? 0 : oid.hashCode());
-		result = prime * result + ((f_oid == null) ? 0 : f_oid.hashCode());
-		result = prime * result + ((f_iid == null) ? 0 : f_iid.hashCode());
+		result = prime * result + ((value == null) ? 0 : value.hashCode());
+		result = prime * result + ((oItems == null) ? 0 : oItems.hashCode());
 		return result;
 	}
 
@@ -77,27 +90,36 @@ public class Orders {
 		if (getClass() != obj.getClass())
 			return false;
 		Orders other = (Orders) obj;
-		if (getF_cid() == null) {
-			if (other.getF_cid() != null)
+		if (getOCustomer() == null) {
+			if (other.getOCustomer() != null)
 				return false;
-		} else if (!getF_cid().equals(other.getF_cid()))
+		} else if (!getOCustomer().equals(other.getOCustomer()))
 			return false;
 		if (oid == null) {
 			if (other.oid != null)
 				return false;
 		} else if (!oid.equals(other.oid))
 			return false;
-		if (f_cid == null) {
-			if (other.f_cid != null)
+		if (value == null) {
+			if (other.value != null)
 				return false;
-		} else if (!f_cid.equals(other.f_cid))
+		} else if (!value.equals(other.value))
 			return false;
-		if (f_iid == null) {
-			if (other.f_iid != null)
+		if (getOItems() == null) {
+			if (other.getOItems() != null)
 				return false;
-		} else if (!f_iid.equals(other.f_iid))
+		} else if (!getOItems().equals(other.getOItems()))
 			return false;
 		return true;
+	}
+	
+	public Double totalValue() {
+		
+		this.oItems.forEach(item -> {
+			value += item.getPrice();
+		});
+		
+		return value;
 	}
 
 }
