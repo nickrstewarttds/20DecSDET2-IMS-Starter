@@ -11,14 +11,14 @@ public class Orders {
 	List<Items> oItems = new ArrayList<Items>();
 
 	public Orders(Customer oCustomer, Double value, List<Items> oItems) {
-		this.setCustomer(oCustomer);
+		this.setOCustomer(oCustomer);
 		this.setValue(value);
 		this.setOItems(oItems);
 	}
 
 	public Orders(Long oid, Customer oCustomer, Double value, List<Items> oItems) {
 		this.setOid(oid);
-		this.setCustomer(oCustomer);
+		this.setOCustomer(oCustomer);
 		this.setValue(value);
 		this.setOItems(oItems);
 	}
@@ -31,11 +31,11 @@ public class Orders {
 		this.oid = oid;
 	}
 
-	public Customer getCustomer() {
+	public Customer getOCustomer() {
 		return oCustomer;
 	}
 
-	public void setCustomer(Customer oCustomer) {
+	public void setOCustomer(Customer oCustomer) {
 		this.oCustomer = oCustomer;
 	}
 
@@ -58,19 +58,26 @@ public class Orders {
 	@Override
 	public String toString() {
 		StringBuilder order = new StringBuilder();
-		order.append(String.format("%s: %s %s", this.oid, oCustomer.getFirstName(), oCustomer.getLastName()));
-		if ()
-		return "oid:" + oid + " f_cid:" + f_cid + " f_oid:" + f_oid + " f_iid" + f_iid;
+		order.append(String.format(": " + this.oid + " " + oCustomer.getFirstName() + " " + oCustomer.getSurname()));
+		if (this.oItems.isEmpty()) {
+			order.append("\n -> There are no items within this order!");
+		}else {
+			order.append(" - value of the order is = £" + this.value);
+			this.oItems.forEach(item -> {
+				order.append(item.getItemName() + ": £" + item.getPrice());
+			});
+		}
+		return order.toString();
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((customer == null) ? 0 : customer.hashCode());
+		result = prime * result + ((oCustomer == null) ? 0 : oCustomer.hashCode());
 		result = prime * result + ((oid == null) ? 0 : oid.hashCode());
 		result = prime * result + ((value == null) ? 0 : value.hashCode());
-		result = prime * result + ((items == null) ? 0 : items.hashCode());
+		result = prime * result + ((oItems == null) ? 0 : oItems.hashCode());
 		return result;
 	}
 
@@ -83,25 +90,25 @@ public class Orders {
 		if (getClass() != obj.getClass())
 			return false;
 		Orders other = (Orders) obj;
-		if (getF_cid() == null) {
-			if (other.getF_cid() != null)
+		if (getOCustomer() == null) {
+			if (other.getOCustomer() != null)
 				return false;
-		} else if (!getF_cid().equals(other.getF_cid()))
+		} else if (!getOCustomer().equals(other.getOCustomer()))
 			return false;
 		if (oid == null) {
 			if (other.oid != null)
 				return false;
 		} else if (!oid.equals(other.oid))
 			return false;
-		if (f_cid == null) {
-			if (other.f_cid != null)
+		if (value == null) {
+			if (other.value != null)
 				return false;
-		} else if (!f_cid.equals(other.f_cid))
+		} else if (!value.equals(other.value))
 			return false;
-		if (f_iid == null) {
-			if (other.f_iid != null)
+		if (getOItems() == null) {
+			if (other.getOItems() != null)
 				return false;
-		} else if (!f_iid.equals(other.f_iid))
+		} else if (!getOItems().equals(other.getOItems()))
 			return false;
 		return true;
 	}
