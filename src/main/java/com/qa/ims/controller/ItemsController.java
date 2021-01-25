@@ -38,7 +38,7 @@ public class ItemsController implements ICrudController<Items> {
         LOGGER.info("Please enter a price");
         Double price = javaUtilities.getDouble();
         Items items = itemsDao.create(new Items(item_name, price));
-        LOGGER.info("Customer created");
+        LOGGER.info("Item created");
         return items;
     }
 
@@ -51,7 +51,7 @@ public class ItemsController implements ICrudController<Items> {
         LOGGER.info("Please enter a price");
         Double price = javaUtilities.getDouble();
         Items items = itemsDao.update(new Items(iid, item_name, price));
-        LOGGER.info("Customer Updated");
+        LOGGER.info("Item Updated");
         return items;
     }
 
