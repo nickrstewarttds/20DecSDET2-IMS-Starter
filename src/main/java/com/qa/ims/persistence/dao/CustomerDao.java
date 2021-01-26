@@ -69,6 +69,8 @@ public class CustomerDao implements IDomainDao<Customer> {
         }
         return null;
     }
+   
+
 
     public Customer read(Long id) {
         try (Connection connection = DatabaseUtilities.getInstance().getConnection();
@@ -108,5 +110,6 @@ public class CustomerDao implements IDomainDao<Customer> {
         }
         return 0;
     }
+
 
 }

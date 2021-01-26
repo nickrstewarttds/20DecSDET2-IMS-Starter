@@ -1,12 +1,14 @@
 package com.qa.ims.persistence.dao;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,17 +21,27 @@ import com.qa.ims.utils.DatabaseUtilities;
 public class OrdersDao implements IDomainDao<Orders> {
 
     public static final Logger LOGGER = LogManager.getLogger();
+    
+    private ItemsDao itemsDao;
+    private CustomerDao customerDao;
+    
+    public OrdersDao(ItemsDao itemsDao, CustomerDao customerDao) {
+		super();
+		this.itemsDao = itemsDao;
+		this.customerDao = customerDao;
+	}
+    
 
-    @Override
+
+	@Override
     public Orders modelFromResultSet(ResultSet resultSet) throws SQLException {
         Long o_id = resultSet.getLong("o_id");
-        Date order_date = resultSet.getDate("order_date");
-        Long fkid = resultSet.getLong("fkid");
-        Long fki_id = resultSet.getLong("fki_id");
-        Customer ordercustomer = resultSet.getCustomer("customers");
-        return new Orders(o_id, order_date, fkid,fki_id, ordercustomer); 
-    }
-
+        Customer customer = customerDao.read(resultSet.getLong("id"));
+        Double Price = resultSet.getDouble("Price");
+        List <Items> orderItems = new ArrayList<>();
+		return new Orders(o_id, Price, customer, orderItems); 
+	}
+    
     @Override
     public List<Orders> readAll() {
         try (Connection connection = DatabaseUtilities.getInstance().getConnection();
@@ -50,7 +62,7 @@ public class OrdersDao implements IDomainDao<Orders> {
     public Orders readLatest() {
         try (Connection connection = DatabaseUtilities.getInstance().getConnection();
                 Statement statement = connection.createStatement();
-                ResultSet resultSet = statement.executeQuery("SELECT * FROM customers orders BY id DESC LIMIT 1");) {
+                ResultSet resultSet = statement.executeQuery("SELECT * FROM orders BY id DESC LIMIT 1");) {
             resultSet.next();
             return modelFromResultSet(resultSet);
         } catch (Exception e) {
@@ -63,9 +75,8 @@ public class OrdersDao implements IDomainDao<Orders> {
     @Override
     public Orders create(Orders order) {
         try (Connection connection = DatabaseUtilities.getInstance().getConnection();
-                Statement statement = connection.createStatement();) {
-        	 statement.executeUpdate("INSERT INTO orders(Orderdate) values('" + order.getorder_date()
-             +  "')");
+                PreparedStatement statement = connection.prepareStatement("INSERT INTO orders(fk_id) Values (?)");) {
+        			statement.setLong(1,  order.getCustomer().getId());
             return readLatest();
         } catch (Exception e) {
             LOGGER.debug(e);
@@ -77,7 +88,7 @@ public class OrdersDao implements IDomainDao<Orders> {
     public Orders read(Long o_id) {
         try (Connection connection = DatabaseUtilities.getInstance().getConnection();
                 Statement statement = connection.createStatement();
-                ResultSet resultSet = statement.executeQuery("SELECT * FROM customers where o_id = " + o_id);) {
+                ResultSet resultSet = statement.executeQuery("SELECT * FROM orders where o_id = " + o_id);) {
             resultSet.next();
             return modelFromResultSet(resultSet);
         } catch (Exception e) {
@@ -91,7 +102,7 @@ public class OrdersDao implements IDomainDao<Orders> {
     public Orders update(Orders order) {
         try (Connection connection = DatabaseUtilities.getInstance().getConnection();
                 Statement statement = connection.createStatement();) {
-            statement.executeUpdate("update orders set order_date'" + order.getorder_date() + "', order_date ='"
+            statement.executeUpdate("update orders set Price'" + order.getPrice() + "', Price ='"
                     + order.geto_id());
             return read(order.geto_id());
         } catch (Exception e) {
@@ -100,19 +111,20 @@ public class OrdersDao implements IDomainDao<Orders> {
         }
         return null;
     }
+    
+    
 
     @Override
     public int delete(long o_id) {
         try (Connection connection = DatabaseUtilities.getInstance().getConnection();
                 Statement statement = connection.createStatement();) {
-            return statement.executeUpdate("delete from customers where id = " + o_id);
+            return statement.executeUpdate("delete from orders where id = " + o_id);
         } catch (Exception e) {
             LOGGER.debug(e);
             LOGGER.error(e.getMessage());
         }
         return 0;
     }
-   
 
 
 }
