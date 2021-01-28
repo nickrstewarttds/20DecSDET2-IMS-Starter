@@ -14,7 +14,7 @@ import org.apache.logging.log4j.Logger;
 import com.qa.ims.persistence.domain.Items;
 import com.qa.ims.utils.DatabaseUtilities;
 
-public class ItemsDao implements IDomainDao<Items> {
+public class ItemDao implements IDomainDao<Items> {
 
 	public static final Logger LOGGER = LogManager.getFormatterLogger();
 
@@ -36,11 +36,11 @@ public class ItemsDao implements IDomainDao<Items> {
 		return null;
 	}
 
-	public Items read(Long Iid) {
+	public Items read(Long iID) {
 
 		try (Connection connection = DatabaseUtilities.getInstance().getConnection();
-				PreparedStatement statement = connection.prepareStatement("SELECT * FROM items WHERE Iid = ?");) {
-			statement.setLong(1, Iid);
+				PreparedStatement statement = connection.prepareStatement("SELECT * FROM items WHERE iid = ?");) {
+			statement.setLong(1, iID);
 			ResultSet resultSet = statement.executeQuery();
 			resultSet.next();
 			return modelFromResultSet(resultSet);
@@ -72,7 +72,7 @@ public class ItemsDao implements IDomainDao<Items> {
 	public Items readLatest() {
 		try (Connection connection = DatabaseUtilities.getInstance().getConnection();
 				Statement statement = connection.createStatement();
-				ResultSet resultSet = statement.executeQuery("SELECT * FROM items ORDER BY Iid DESC LIMIT 1");) {
+				ResultSet resultSet = statement.executeQuery("SELECT * FROM items ORDER BY iid DESC LIMIT 1");) {
 			resultSet.next();
 			return modelFromResultSet(resultSet);
 		} catch (Exception e) {
@@ -86,7 +86,7 @@ public class ItemsDao implements IDomainDao<Items> {
 	public Items update(Items items) {
 		try (Connection connection = DatabaseUtilities.getInstance().getConnection();
 				PreparedStatement statement = connection
-						.prepareStatement("UPDATE items SET item_name = ?, price = ? WHERE Iid = ?");) {
+						.prepareStatement("UPDATE items SET item_name = ?, price = ? WHERE iid = ?");) {
 			statement.setString(1, items.getItemName());
 			statement.setDouble(2, items.getPrice());
 			statement.setLong(3, items.getIid());
@@ -104,7 +104,7 @@ public class ItemsDao implements IDomainDao<Items> {
 	public int delete(long Iid) {
 		try (Connection connection = DatabaseUtilities.getInstance().getConnection();
 				Statement statement = connection.createStatement();) {
-			return statement.executeUpdate("delete from items where Iid = " + Iid);
+			return statement.executeUpdate("delete from items where iid = " + Iid);
 		} catch (Exception e) {
 			LOGGER.debug(e);
 			LOGGER.error(e.getMessage());
@@ -115,11 +115,11 @@ public class ItemsDao implements IDomainDao<Items> {
 
 	@Override
 	public Items modelFromResultSet(ResultSet resultSet) throws SQLException {
-		Long Iid = resultSet.getLong("Iid");
+		Long iID = resultSet.getLong("iid");
 		String itemName = resultSet.getString("item_name");
 		double price = resultSet.getDouble("price");
 
-		return new Items(Iid, itemName, price);
+		return new Items(iID, itemName, price);
 	}
 
 }

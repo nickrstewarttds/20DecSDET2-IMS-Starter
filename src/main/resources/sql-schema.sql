@@ -5,27 +5,28 @@ CREATE SCHEMA IF NOT EXISTS `ims`;
 USE `ims` ;
 
 CREATE TABLE IF NOT EXISTS `ims`.`customers` (
-    `id` INT(11) NOT NULL AUTO_INCREMENT,
+    `cid` INT(11) NOT NULL AUTO_INCREMENT,
     `first_name` VARCHAR(40) DEFAULT NULL,
     `surname` VARCHAR(40) DEFAULT NULL,
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`cid`)
 );
 
 CREATE TABLE IF NOT EXISTS `ims`.`items` (
-	`Iid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	`iid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	`item_name` VARCHAR(30) DEFAULT NULL,
 	`price` INT(20) DEFAULT NULL
 );
 
 CREATE TABLE IF NOT EXISTS `ims`.`orders` (
-	`Oid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-	`fk.id` INT(11) NOT NULL,
-	FOREIGN KEY (`fk.id`) REFERENCES `customers` (`id`)
+	`oid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	`fk_cid` INT(11) NOT NULL,
+	`order_value` DOUBLE,
+	FOREIGN KEY (`fk_cid`) REFERENCES `customers` (`cid`) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS `ims`.`orderline` (
-	`fk.Oid` INT(11) NOT NULL,
-	`fk.Iid` INT(11) NOT NULL,
-	FOREIGN KEY (`fk.Oid`) REFERENCES `orders`(`Oid`),
-	FOREIGN KEY (`fk.Iid`) REFERENCES `items` (`Iid`)
+	`fk_oid` INT(11) NOT NULL,
+	`fk_iid` INT(11) NOT NULL,
+	FOREIGN KEY (`fk_oid`) REFERENCES `orders`(`oid`) ON DELETE CASCADE,
+	FOREIGN KEY (`fk_iid`) REFERENCES `items` (`iid`) ON DELETE CASCADE
 );
