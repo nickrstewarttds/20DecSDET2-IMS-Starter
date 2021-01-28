@@ -36,7 +36,7 @@ public class CustomerDao implements IDomainDao<Customer> {
 
     public Customer read(Long id) {
         try (Connection connection = DatabaseUtilities.getInstance().getConnection();
-                PreparedStatement statement = connection.prepareStatement("SELECT * FROM customers WHERE id = ?");) {
+                PreparedStatement statement = connection.prepareStatement("SELECT * FROM customers WHERE cid = ?");) {
             statement.setLong(1, id);
             ResultSet resultSet = statement.executeQuery();
             resultSet.next();
@@ -68,7 +68,7 @@ public class CustomerDao implements IDomainDao<Customer> {
     public Customer readLatest() {
         try (Connection connection = DatabaseUtilities.getInstance().getConnection();
                 Statement statement = connection.createStatement();
-                ResultSet resultSet = statement.executeQuery("SELECT * FROM customers ORDER BY id DESC LIMIT 1");) {
+                ResultSet resultSet = statement.executeQuery("SELECT * FROM customers ORDER BY cid DESC LIMIT 1");) {
             resultSet.next();
             return modelFromResultSet(resultSet);
         } catch (Exception e) {
@@ -82,7 +82,7 @@ public class CustomerDao implements IDomainDao<Customer> {
     public Customer update(Customer customer) {
         try (Connection connection = DatabaseUtilities.getInstance().getConnection();
                 PreparedStatement statement = connection
-                        .prepareStatement("UPDATE customers SET first_name = ?, surname = ? WHERE id = ?");) {
+                        .prepareStatement("UPDATE customers SET first_name = ?, surname = ? WHERE cid = ?");) {
             statement.setString(1, customer.getFirstName());
             statement.setString(2, customer.getSurname());
             statement.setLong(3, customer.getId());
@@ -99,7 +99,7 @@ public class CustomerDao implements IDomainDao<Customer> {
     public int delete(long id) {
         try (Connection connection = DatabaseUtilities.getInstance().getConnection();
                 Statement statement = connection.createStatement();) {
-            return statement.executeUpdate("delete from customers where id = " + id);
+            return statement.executeUpdate("delete from customers where cid = " + id);
         } catch (Exception e) {
             LOGGER.debug(e);
             LOGGER.error(e.getMessage());
@@ -109,7 +109,7 @@ public class CustomerDao implements IDomainDao<Customer> {
 
     @Override
     public Customer modelFromResultSet(ResultSet resultSet) throws SQLException {
-        Long id = resultSet.getLong("id");
+        Long id = resultSet.getLong("cid");
         String firstName = resultSet.getString("first_name");
         String surname = resultSet.getString("surname");
         return new Customer(id, firstName, surname);

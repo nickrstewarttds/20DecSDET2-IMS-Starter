@@ -5,7 +5,7 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.qa.ims.persistence.dao.ItemsDao;
+import com.qa.ims.persistence.dao.ItemDao;
 import com.qa.ims.persistence.domain.Items;
 import com.qa.ims.utils.JavaUtilities;
 
@@ -13,10 +13,10 @@ public class ItemsController implements ICrudController<Items> {
 
 	public static final Logger LOGGER = LogManager.getFormatterLogger();
 
-	private ItemsDao itemsDao;
+	private ItemDao itemsDao;
 	private JavaUtilities javaUtilities;
 
-	public ItemsController(ItemsDao itemsDao, JavaUtilities javaUtilities) {
+	public ItemsController(ItemDao itemsDao, JavaUtilities javaUtilities) {
 		super();
 		this.itemsDao = itemsDao;
 		this.javaUtilities = javaUtilities;
@@ -46,13 +46,13 @@ public class ItemsController implements ICrudController<Items> {
 
 	@Override
 	public Items update() {
-		LOGGER.info("Please enter the Iid you would like to update");
-		Long Iid = javaUtilities.getLong();
+		LOGGER.info("Please enter the iid you would like to update");
+		Long iID = javaUtilities.getLong();
 		LOGGER.info("Please enter the item name");
 		String itemName = javaUtilities.getString();
 		LOGGER.info("Please enter the price");
 		double price = javaUtilities.getDouble();
-		Items items = itemsDao.update(new Items(Iid, itemName, price));
+		Items items = itemsDao.update(new Items(iID, itemName, price));
 		LOGGER.info("Item updated");
 
 		return items;
@@ -60,7 +60,7 @@ public class ItemsController implements ICrudController<Items> {
 
 	@Override
 	public int delete() {
-		LOGGER.info("Please enter the item id (Iid) you would like to delete");
+		LOGGER.info("Please enter the item id (iid) you would like to delete");
 		Long Iid = javaUtilities.getLong();
 		return itemsDao.delete(Iid);
 	}

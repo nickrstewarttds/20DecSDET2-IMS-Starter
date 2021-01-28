@@ -2,7 +2,7 @@ package com.qa.ims.persistence.domain;
 
 public class Items {
 
-	private Long Iid;
+	private Long iID;
 	private String itemName;
 	private double price;
 
@@ -11,18 +11,18 @@ public class Items {
 		this.setPrice(Price);
 	}
 
-	public Items(Long Iid, String itemName, double Price) {
-		this.setIid(Iid);
+	public Items(Long iID, String itemName, double Price) {
+		this.setIid(iID);
 		this.setItemName(itemName);
 		this.setPrice(Price);
 	}
 
 	public Long getIid() {
-		return Iid;
+		return iID;
 	}
 
 	public void setIid(Long iid) {
-		Iid = iid;
+		iID = iid;
 	}
 
 	public String getItemName() {
@@ -44,14 +44,14 @@ public class Items {
 
 	@Override
 	public String toString() {
-		return "Items [Iid=" + Iid + ", itemName=" + itemName + ", price=" + price + "]";
+		return "Items [iid=" + iID + ", itemName=" + itemName + ", price=" + price + "]";
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((Iid == null) ? 0 : Iid.hashCode());
+		result = prime * result + ((iID == null) ? 0 : iID.hashCode());
 		result = prime * result + ((itemName == null) ? 0 : itemName.hashCode());
 		long temp;
 		temp = Double.doubleToLongBits(price);
@@ -68,10 +68,10 @@ public class Items {
 		if (getClass() != obj.getClass())
 			return false;
 		Items other = (Items) obj;
-		if (Iid == null) {
-			if (other.Iid != null)
+		if (iID == null) {
+			if (other.iID != null)
 				return false;
-		} else if (!Iid.equals(other.Iid))
+		} else if (!iID.equals(other.iID))
 			return false;
 		if (itemName == null) {
 			if (other.itemName != null)
