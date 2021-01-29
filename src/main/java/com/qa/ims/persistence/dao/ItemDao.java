@@ -28,7 +28,7 @@ public class ItemDao implements IDomainDao<Items> {
 			statement.executeUpdate();
 			return readLatest();
 		} catch (Exception e) {
-			LOGGER.debug(e);
+			LOGGER.debug(e); 
 			LOGGER.error(e.getMessage());
 
 		}
