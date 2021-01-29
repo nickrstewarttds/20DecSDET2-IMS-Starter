@@ -1,4 +1,4 @@
-Coverage: 54.4%
+Coverage: src/main/java 47.9%
 # IMS Database 
 
 This project involves creating a database which takes in user input to allow them to create a customer, an item(s) and an order containing the customer and the item(s) they have purchased.
