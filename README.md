@@ -1,4 +1,5 @@
 Coverage: src/main/java 47.9%
+Jira Story board - https://academytraining.atlassian.net/secure/RapidBoard.jspa?projectKey=IM&rapidView=4&atlOrigin=eyJpIjoiMDM2Zjc4NzM3MDNmNDAxZGI2Mjg2NjdkOTZhZWQ1MmQiLCJwIjoiaiJ9
 # IMS Database 
 
 This project involves creating a database which takes in user input to allow them to create a customer, an item(s) and an order containing the customer and the item(s) they have purchased.
