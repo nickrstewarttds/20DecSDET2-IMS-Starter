@@ -21,7 +21,7 @@ public class OrderDao implements IDomainDao<Orders> {
 	private ItemDao itemDao;
 	private CustomerDao customerDao;
 	
-	
+	 
 	public static final Logger LOGGER = LogManager.getLogger();
 	
 	
@@ -40,7 +40,7 @@ public class OrderDao implements IDomainDao<Orders> {
 							try (ResultSet resultSet = statement.executeQuery();){
 								while (resultSet.next()) {
 									itemIds.add(resultSet.getLong("fk_iid"));
-								}
+								} 
 								
 							}
 								
